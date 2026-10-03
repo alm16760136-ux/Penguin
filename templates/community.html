@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Avisos y actividades{% endblock %}{% block breadcrumb %}Avisos y actividades{% endblock %}
+{% block content %}
+<section class="page-heading"><div><p class="eyebrow">COMUNICACIÓN DEL CURSO</p><h1>Avisos <em>& actividades.</em></h1><p class="subtitle">Comparte novedades y organiza el trabajo del grupo.</p></div></section>
+<section class="split-layout"><div class="form-panel"><div class="panel-heading"><span class="panel-index">＋</span><div><h2>Nueva publicación</h2><p>Elige qué quieres compartir con el grupo.</p></div></div><form method="post" class="form-stack"><label>Tipo de publicación<select name="kind" id="post-kind"><option value="announcement">Aviso</option><option value="activity">Actividad</option></select></label><label>Título<input name="title" placeholder="Ej. Cambio de salón" required></label><label>Detalle<textarea name="body" rows="4" placeholder="Escribe la información para tu grupo..." required></textarea></label><label id="due-date-field" hidden>Fecha de entrega<input name="due_date" type="date"></label><button class="button button-dark" type="submit">Publicar en el tablón <span>→</span></button></form></div>
+<div class="community-column"><section><div class="roster-heading"><div><p class="eyebrow">MENSAJES RECIENTES</p><h2>Avisos</h2></div></div><div class="notice-stack notice-board">{% for notice in announcements %}<article class="notice-item"><span class="notice-dot"></span><div><div class="notice-meta">{{ notice.created_at }}</div><h3>{{ notice.title }}</h3><p>{{ notice.body }}</p></div></article>{% else %}<p class="empty-line">Sin avisos por ahora.</p>{% endfor %}</div></section><section><div class="roster-heading"><div><p class="eyebrow">TRABAJO ASIGNADO</p><h2>Actividades</h2></div></div><div class="activity-list">{% for activity in activities %}<article class="activity-row"><div class="activity-date-chip"><strong>{{ activity.due_date[8:10] }}</strong><small>{{ activity.due_date[5:7] }}</small></div><div><h3>{{ activity.title }}</h3><p>{{ activity.body }}</p></div></article>{% else %}<p class="empty-line">Sin actividades publicadas.</p>{% endfor %}</div></section></div></section>
+<script>
+  const kindSelect = document.getElementById('post-kind');
+  const dueField = document.getElementById('due-date-field');
+  const dueInput = dueField.querySelector('input');
+  function syncPostFields() { const isActivity = kindSelect.value === 'activity'; dueField.hidden = !isActivity; dueInput.required = isActivity; }
+  kindSelect.addEventListener('change', syncPostFields);
+  syncPostFields();
+</script>
+{% endblock %}
